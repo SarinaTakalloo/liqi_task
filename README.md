@@ -17,7 +17,7 @@ In order to overcome this issu the reader must understand a precise answer needs
 Considering this information three ratio is introduced: ebt-to-liability ratio, debt service coverage ratio and current ratio which each discusse different aspects of financial healthness of company. These three ratios as there are other factors that lenders may consider when evaluating a company's creditworthiness. We can interpret the ratios based on their numbers.
 
 
-These ratios are obtained as 0.0514, 1.420 and 1.021 for debt-to-liability, service coverage and current ratio respectively.
+These ratios are obtained as **0.0514, 1.420** and **1.021** for **debt-to-liability, service coverage** and **current ratio respectively**.
 
 
 The debt-to-liability ratio: This ratio measures the amount of debt a company has in relation to its total liabilities. It is calculated by dividing the company's total debt by its total liabilities. A high debt-to-liability ratio may indicate that the company has taken on too much debt relative to its overall financial obligations. So conversly, the number 0.0514 indicates that the company has a low amount of debt relative to its total liabilities. This may be viewed positively by lenders as it indicates that the company has a lower risk of defaulting on its debt obligations.
