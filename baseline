@@ -1,0 +1,16 @@
+from google.colab import auth
+auth.authenticate_user()
+
+import gspread
+from google.auth import default
+creds, _ = default()
+
+gc = gspread.authorize(creds)
+
+auth.authenticate_user()
+
+
+worksheet = gc.open_by_url('https://docs.google.com/spreadsheets/d/1TAkUt6RygXEMIFp59L5GS15l-YWDjupOH1WI9XM6M0k/edit#gid=0').sheet1
+rows = worksheet.get_all_values()
+
+print(rows)
