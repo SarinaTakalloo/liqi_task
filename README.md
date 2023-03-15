@@ -11,6 +11,24 @@ To prepare a report for the lending manager to help him/her decide whether to ap
 * Python language
 * Code reachable on your personal github (or preferred git hosting) 
 
+## CODE REPORT:
+The code is designed to read data from a Google sheet and perform some financial analysis on it.
+
+The code first authenticates the user and connects to Google Colab to access the Google Sheets API. It then reads the data from a specific Google sheet and stores it in a pandas DataFrame.
+
+Next, the code preprocesses the data by converting the amount column to a float, creating separate columns and then calculates various financial parameters such as total revenue, operating expenses, and debt.
+
+After this, the code defines a function to calculate various financial ratios such as debt-to-liability ratio, debt-service coverage ratio, and current ratio. Based on these ratios, the code then calculates the maximum amount that can be granted to the company.
+
+Finally, the code checks if the company's health is approved based on the calculated ratios and prints the maximum amount that can be granted if the company's health is approved. If the company's health is not approved, the code raises a ValueError with an appropriate message.
+
+In the function calculate_parameters(df), the variable names used to calculate TR, EX, and DT do not match the variable names used later in the code. Instead of df_transaction, the variable names should be df.
+
+In the function calculate_ratios(df), the variables debt, operating_expenses, and total_revenue are not defined. Instead, the variables debt, operating_expenses, and total_revenue should be passed as arguments to the function.
+
+In the function calculate_max_amount(df), the variable max_amount_to_be_granted is not returned by the function. Instead of printing the value, the function should return the value.
+
+
 ### SOLUTION:
 
 In order to overcome this issue the reader must understand a precise answer needs more information on the data. Therefore, it's difficult to determine whether a company is able to borrow money based solely on the provided categories; however, some information can be extracted such as total revenue(INVOICE COOLECTION and FUNDING DISTRIBUTION, liabilities(UTILITIES, SALARY, and PAYMENTS) and debt(LOAN PAYMENT).
