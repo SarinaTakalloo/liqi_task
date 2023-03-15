@@ -73,6 +73,10 @@ debt_service_coverage_ratio = (total_revenue - operating_expenses)/debt
 current_ratio = total_revenue/(debt + operating_expenses)
 
 
-
+cash_balance = total_revenue - abs(operating_expenses + debt)
+if ((debt_to_liability_ratio < 0.1) and (debt_service_coverage_ratio > 1) and (current_ratio > 1)):
+  maximum_amount_to_be_granted = cash_balance
+else:
+  print("company's health is not approved")
 
 
