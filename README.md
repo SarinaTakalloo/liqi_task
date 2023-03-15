@@ -13,8 +13,8 @@ To prepare a report for the lending manager to help him/her decide whether to ap
 
 ### SOLUTION:
 
-In order to overcome this issu the reader must understand a precise answer needs more information on the data. Therefore, it's difficult to determine whether a company is able to borrow money based solely on the provided categories; however, some information can be extracted such as total revenue(INVOICE COOLECTION and FUNDING DISTRIBUTION, liabilities(UTILITIES, SALARY, and PAYMENTS) and debt(LOAN PAYMENT).
-Considering this information three ratio is introduced: ebt-to-liability ratio, debt service coverage ratio and current ratio which each discusse different aspects of financial healthness of company. These three ratios as there are other factors that lenders may consider when evaluating a company's creditworthiness. We can interpret the ratios based on their numbers.
+In order to overcome this issue the reader must understand a precise answer needs more information on the data. Therefore, it's difficult to determine whether a company is able to borrow money based solely on the provided categories; however, some information can be extracted such as total revenue(INVOICE COOLECTION and FUNDING DISTRIBUTION, liabilities(UTILITIES, SALARY, and PAYMENTS) and debt(LOAN PAYMENT).
+Considering this information three ratio are introduced: ebt-to-liability ratio, debt service coverage ratio and current ratio which each discuss different aspects of financial health of company. These three ratios as there are other factors that lenders may consider when evaluating a company's creditworthiness. We can interpret the ratios based on their numbers.
 
 
 These ratios are obtained as **0.0514, 1.420** and **1.021** for **debt-to-liability, service coverage** and **current ratio respectively**.
