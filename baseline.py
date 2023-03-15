@@ -1,11 +1,11 @@
 #first try to connect to google colab in order to have access to google sheets
 from google.colab import auth
-auth.authenticate_user()
-
+import pandas as pd
 import gspread
 from google.auth import default
-creds, _ = default()
 
+auth.authenticate_user()
+creds, _ = default()
 gc = gspread.authorize(creds)
 auth.authenticate_user()
 
@@ -16,32 +16,60 @@ rows = worksheet.get_all_values()
 
 
 # reading data
-import pandas as pd
-df = pd.DataFrame.from_records(rows[1:] , columns = ['data', 'categories', 'amount'])
-print(df.dtypes)
-
-#access to the month of each transaction
-df['data'] = pd.to_datetime(df['data'])
+def read_data(WS):
+  rows = WS.get_all_values()
+  df = pd.DataFrame.from_records(rows[1:] , columns = ['date', 'categories', 'amount'])
+  return df
 
 
+def preprocess_data(df):
+  df['amount'] = df['amount'].str.replace('€', '').str.replace(' ', '').str.replace(',', '').astype(float)
+  df['in_flow'] = df[df['amount'] > 0]['amount']
+  df['out_flow'] = df[df['amount'] < 0]['amount']
+  return df
 
-# Calculate inflow and outflow for each month (this is based of negative and positive amount in the transaction file)
-#convert the amount column to float
-df['amount'] = df['amount'].str.replace('€', '')
-df['amount'] = df['amount'].str.replace(' ','')
-df['amount'] = df['amount'].str.replace(',','')
-df['amount'] =df['amount'].astype(float)
+def calculate_parameters(df):
+  TR = df_transaction.loc[df_transaction['categories'].isin(['INCASSO FATTURA','EROGAZIONE FINANZIAMENTO']), 'amount'].sum()
+  EX = df_transaction.loc[df_transaction['categories'].isin(['STIPENDI', 'UTENZE' , 'PAGAMENTO FORNITORI','PAGAMENTO FATTURA']), 'amount'].sum()
+  DT = df_transaction.loc[df_transaction['categories'].isin(['RIMBORSO FINANZIAMENTO']), 'amount'].sum()
+  return TR,EX,DT
 
-#calculate in-flow and out-flow and group by month to monitor every month cash balance
-df['in-flow'] = df[df['amount'] > 0]['amount']
-df['out-flow'] = df[df['amount'] < 0]['amount']
+def calculate_ratios(df):
+  debt_to_liability_ratio = abs(debt/operating_expenses)
+  debt_service_coverage_ratio = (total_revenue - abs(operating_expenses))/abs(debt)
+  current_ratio = total_revenue/abs(debt + operating_expenses)
+  return debt_to_liability_ratio, debt_service_coverage_ratio, current_ratio
+
+
+def calculate_max_amount(df):
+  debt_to_liability_ratio, debt_service_coverage_ratio, current_ratio = calculate_ratios(df)
+  if ((debt_to_liability_ratio < 0.1) and (debt_service_coverage_ratio > 1) and (current_ratio > 1)):
+    maximum_amount_to_be_granted = cash_balance
+    print(maximum_amount_to_be_granted)
+  else:
+    raise ValueError("Company's health is not approved")
+
+
+
+try:
+  df_transaction = preprocess_data(read_data(worksheet))
+  total_revenue, operating_expenses, debt = calculate_parameters(df_transaction)
+  cash_balance = total_revenue - abs(operating_expenses + debt)
+  max_amount = calculate_max_amount(df_transaction)
+    print("Maximum amount that can be granted: ", max_amount)
+except Exception as e:
+    print("An error occurred: ", str(e))
 
 
 ##in this task there is no need to calculate the average monthly cash flow. 
 ##however, to have a better insight of what's going on every month, I made this part available 
+#calculate in-flow and out-flow and group by month to monitor every month cash balance
+#df['data'] = pd.to_datetime(df['data'])
 #df['month'] = df['data'].dt.month
-#monthly = df.groupby('month').agg({'in-flow': "sum", 'out-flow': "sum"})
 
+#df['in-flow'] = df[df['amount'] > 0]['amount']
+#df['out-flow'] = df[df['amount'] < 0]['amount']
+#monthly = df.groupby('month').agg({'in-flow': "sum", 'out-flow': "sum"})
 
 ## Calculate average monthly inflow and outflow
 #avg_inflow = monthly['in-flow'].mean()
@@ -49,34 +77,5 @@ df['out-flow'] = df[df['amount'] < 0]['amount']
 ## Calculate cash balance for each month
 #monthly['Cash Balance'] = monthly['in-flow'] + monthly['out-flow']
 #max_cash_balance = monthly['Cash Balance'].max()
-
-
-
-
-
-#calculate all the positive amount and negative amount as current assets and liabilities/debts respectively and the obtaining current available cash
-in_flow , out_flow = df.agg({'in-flow': "sum", 'out-flow': "sum"})
-current_cash = in_flow - abs(out_flow)
-
-#I have considered the current assets as INCASSO FATTURA and EROGAZIONE FINANZIAMENTO; but, in reality to determine correct current assets, 
-#other type of data is needed such as cash, cash equivalents, short-term investments, accounts receivable, inventory, supplies, and prepaid expenses.
-#in this task there are only funding distributions and invoice collection
-
-total_revenue = df.loc[df['categories'].isin(['INCASSO FATTURA','EROGAZIONE FINANZIAMENTO']), 'amount'].sum()
-operating_expenses = df.loc[df['categories'].isin(['STIPENDI', 'UTENZE' , 'PAGAMENTO FORNITORI','PAGAMENTO FATTURA']), 'amount'].sum()
-debt = df.loc[df['categories'].isin(['RIMBORSO FINANZIAMENTO']), 'amount'].sum()
-
-#calculate different ratios:
-
-debt_to_liability_ratio = debt/operating_expenses
-debt_service_coverage_ratio = (total_revenue - operating_expenses)/debt
-current_ratio = total_revenue/(debt + operating_expenses)
-
-
-cash_balance = total_revenue - abs(operating_expenses + debt)
-if ((debt_to_liability_ratio < 0.1) and (debt_service_coverage_ratio > 1) and (current_ratio > 1)):
-  maximum_amount_to_be_granted = cash_balance
-else:
-  print("company's health is not approved")
 
 
