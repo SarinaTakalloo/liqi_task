@@ -1,3 +1,4 @@
+#first try to connect to google colab in order to have access to google sheets
 from google.colab import auth
 auth.authenticate_user()
 
@@ -14,3 +15,16 @@ worksheet = gc.open_by_url('https://docs.google.com/spreadsheets/d/1TAkUt6RygXEM
 rows = worksheet.get_all_values()
 
 print(rows)
+
+
+
+# reading data
+import pandas as pd
+df = pd.DataFrame.from_records(rows[1:] , columns = ['data', 'categories', 'amount'])
+print(df.dtypes)
+
+#access to the month of each transaction
+df['data'] = pd.to_datetime(df['data'])
+df['month'] = df['data'].dt.month
+
+
